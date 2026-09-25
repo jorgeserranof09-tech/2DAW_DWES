@@ -3,7 +3,7 @@
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
-include(__DIR__."/src/funciones.php");
+include(__DIR__ . "/src/funciones.php");
 
 // $coches = [];
 
@@ -43,8 +43,23 @@ include(__DIR__."/src/funciones.php");
 
 
 
-$coches = getCSVContentInArray("coches.csv","color");
-dump($coches);
+if (!isset($_POST['nombre'])) {
+    echo "<form action='' method='post'>
+    <p>Dime el valor que quieras indexado</p>
+    <label type='text' for='opciones'name='nombre'></label>
 
+    <select name='nombre' id='valores-indexado'>
+    <option value='matricula'>Matricula</option>
+    <option value='marca'>Marca</option>
+    <option value='modelo'>Modelo</option>
+    <option value='color'>Color</option>
+    </select>";
 
-?>
+    echo "<br>";
+    echo "<input type='submit'></input></form>";
+} else {
+    $index = $_POST['nombre'];
+
+    $coches = getCSVContentInArray("coches.csv", $index);
+    dump($coches);
+}
