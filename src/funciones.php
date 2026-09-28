@@ -37,16 +37,16 @@ function getCSVContentInArray(String $rutaCSV, $definir_clave)
 
 function imprimir_tabla($array_csv)
 {
-  echo "<table border='1'>";
+  echo "<table class='tabla' border='1'>";
   foreach ($array_csv as $indexado => $objeto) {
     echo "<tr>";
     foreach ($objeto as $clave => $valor) {
 
       if(terminaConImagen($valor)) {
-        echo "<td><img src='src/" . $valor . "' height='350px' width='400px'></td>";
+        echo "<td><img src='src/" . $valor . "'></td>";
       }
       else if($valor==null) {
-        echo "<td><img src='src/sin_imagen.png' height='350px' width='400px'></td>";
+        echo "<td><img src='src/sin_imagen.png'></td>";
       } else {
         echo "<td>" . $valor . "</td>";
       }
@@ -65,3 +65,5 @@ function terminaConImagen(string $cadena): bool {
   
   return (bool) preg_match('/' . $formatos . '$/i', $cadena);
 }
+
+

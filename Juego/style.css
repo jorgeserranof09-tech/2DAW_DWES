@@ -1,0 +1,35 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+.encabezado {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 40px;
+    background-color: rgb(76, 158, 235);
+    color: rgb(0, 0 0, 0.5);
+}
+
+.contenedor {
+    margin:auto;
+    margin: 120px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.tablero {
+    display: grid;
+    grid-template-columns: repeat(4,20px);
+    align-items: center;
+}
+
+.campo {
+    height: 16px;
+    width: 16px;
+    background-color: blue;
+    border: 2px solid black;
+}
+

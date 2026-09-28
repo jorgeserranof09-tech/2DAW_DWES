@@ -1,0 +1,11 @@
+.tabla {
+    display: grid;
+    grid-template-columns: 200px repeat(auto-fill, 100px) 300px;
+    gap: 20px;
+}
+
+table img{
+    height: 250px;
+    width: 300px;
+}
+
