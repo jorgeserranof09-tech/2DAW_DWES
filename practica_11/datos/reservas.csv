@@ -1,0 +1,9 @@
+nombre,email,pista,fecha,hora
+Jorge Pérez, jorge.perez@example.com, Pista 1, 2026-10-09, 10:00 - 11:00
+Ana López, ana.lopez@example.com, Pista 2, 2026-10-09, 11:00 - 12:00
+Carlos García, carlos.garcia@example.com, Pista 1, 2026-10-10, 12:00 - 13:00
+María Sánchez, maria.sanchez@example.com, Pista 3, 2026-10-10, 17:00 - 18:00
+Pedro Martín, pedro.martin@example.com, Pista 2, 2026-10-11, 09:00 - 10:00
+Lucía Fernández, lucia.fernandez@example.com, Pista 1, 2026-10-11, 18:00 - 19:00
+David Ruiz, david.ruiz@example.com, Pista 3, 2026-10-12, 16:00 - 17:00
+Elena Torres, elena.torres@example.com, Pista 2, 2026-10-12,19:00 - 20:00

@@ -14,7 +14,20 @@ try {
         ]
     );
     
-    echo $pdo->query('SELECT * FROM familia WHERE cod LIKE :code');
+       $consulta = $pdo->prepare(
+        'SELECT * FROM familia WHERE cod LIKE :code'
+    );
+
+    $consulta->execute([
+        'code' => $code
+    ]);
+
+    $resultado = $consulta->fetchAll();
+
+    echo '<pre>';
+    print_r($resultado);
+    echo '</pre>';
+
  
 
 
