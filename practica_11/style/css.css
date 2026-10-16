@@ -1,11 +1,155 @@
+/* APLICA A TODO*/
 * {
     margin: 0;
     padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: rgb(53, 52, 52);
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+
+    min-height: 100vh;
+}
+
+.contenedor {
+    width: 400px;
+    height: 300px;
+    background-color: #444;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    gap: 10px;
+}
+
+h1 {
+    color: yellow;
+    margin-bottom: 20px;
+}
+
+p {
+    margin-bottom: 40px;
+    color: white;
 }
 
 
-/* form {
+
+/* INDEX.PHP */
+button {
+    border: none;
+    justify-content: center;
+    width: 250px;
+    height: 40px;
+    border-radius: 10px;
+    background-color: aqua;
+}
+
+button:hover {
+    background-color: blueviolet;
+}
+
+
+
+
+
+
+
+/* LISTADO.PHP */
+
+.tabla_reservas {
+    width: auto;
+}
+
+.contenedor_listado {
+    width: 70%;
+    height: 40%;
+    background-color: #444;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    gap: 10px;
+}
+
+
+
+
+
+
+
+
+
+
+/* RESERVAR.PHP */
+
+.contenedor_reserva {
+    max-width: 500px;
+    margin: 40px auto;
+    padding: 20px;
+    background-color: #444;
+    border-radius: 10px;
+    color: #fff;
+    font-family: Arial, sans-serif;
+    text-align: center;
+}
+
+
+.contenedor_reserva form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+
+.contenedor_reserva form input[type="text"],
+.contenedor_reserva form input[type="email"],
+.contenedor_reserva form input[type="date"],
+.contenedor_reserva form select {
+    width: 100%;
+    padding: 10px;
+    border: 0;
+    border-radius: 8px;
+    background-color: rgb(245, 245, 245);
+    box-sizing: border-box;
+}
+
+
+.contenedor_reserva .opciones-grupo {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap;
+    padding: 5px 0;
+}
+
+.contenedor_reserva .opciones-grupo label {
     display: flex;
     align-items: center;
-    justify-content: center;
-} */
+    gap: 5px;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+
+.contenedor_reserva input[type="submit"] {
+    background-color: #28a745;
+    color: white;
+    font-weight: bold;
+    border: 0;
+    padding: 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.contenedor_reserva input[type="submit"]:hover {
+    background-color: #218838;
+}
