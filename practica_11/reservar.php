@@ -4,7 +4,7 @@ $fecha_min = date("Y-m-d");
 $fecha_max = date("Y-m-d", strtotime($fecha_min . ' + 14 days'));
 
 
-validar_datos();
+verificar_crear_reserva();
 ?>
 
 
@@ -14,55 +14,62 @@ validar_datos();
 
 <link rel="stylesheet" href="style/css.css">
 <div class="contenedor_reserva">
-<h1>Formulario de reserva</h1>
-<p>Porfavor rellena el siguiente formulario</p>
-<form method="post">
-    <input type="text" name="nombre" placeholder="Nombre">
+    <h1>Formulario de reserva</h1>
+    <p>Porfavor rellena el siguiente formulario</p>
+    <form method="post">
+        <input type="text" name="nombre" placeholder="Nombre">
 
-    <input type="email" name="email" placeholder="Email">
+        <input type="email" name="email" placeholder="Email">
 
-    <select name="pista">
-        <option value="1">Pádel 1</option>
-        <option value="2">Pádel 2</option>
-        <option value="3">Tenis</option>
-        <option value="3">Baloncesto</option>
-        <option value="3">Futbol</option>
+        <select id="pista" name="pista">
+            <option selected="true" disabled="disabled">seleccione una pista</option>
+            <option value="Pádel 1">Pádel 1</option>
+            <option value="Pádel 2">Pádel 2</option>
+            <option value="Tenis">Tenis</option>
+            <option value="Baloncesto">Baloncesto</option>
+        </select>
 
-    </select>
+        <input type="date"
+            min="<?php echo htmlspecialchars($fecha_min); ?>"
+            max="<?php echo htmlspecialchars($fecha_max); ?>"
+            value="<?php echo htmlspecialchars($fecha_min); ?>" name="fecha">
 
-    <input type="date" 
-    min="<?php echo htmlspecialchars($fecha_min); ?>"
-    max="<?php echo htmlspecialchars($fecha_max); ?>" 
-    value="<?php echo htmlspecialchars($fecha_min); ?>" name="fecha">
+        <div class="opciones-grupo">
+            <input type="radio" id="hora1" name="hora" value="16:00" />
+            <label for="hora1">16:00</label>
 
-    <div class="opciones-grupo">
-    <input type="radio" id="hora1" name="hora" value="10:00"/>
-     <label for="hora1">10:00</label>
-    <input type="radio" id="hora2" name="hora" value="12:00"/>
-     <label for="hora2">12:00</label>
-    <input type="radio" id="hora3" name="hora" value="16:00"/>
-     <label for="hora3">16:00</label>
-     <input type="radio" id="hora4" name="hora" value="20:00"/>
-     <label for="hora4">20:00</label>
-    </div>
+            <input type="radio" id="hora2" name="hora" value="17:00" />
+            <label for="hora2">17:00</label>
 
-    <label>Materiales</label>
-    <input type="checkbox"  id="raqueta" name="raqueta">
-    <label for="raqueta">Raqueta</label>
-    <input type="checkbox"  id="balon_futbol" name="balon_futbol">
-    <label for="balon_futbol">Balon de futbol</label>
-    <input type="checkbox"  id="balon_baloncesto" name="balon_baloncesto">
-    <label for="balon_baloncesto">Balon baloncesto</label>
-    <input type="checkbox"  id="pelota_tenis" name="pelota_tenis">
-    <label for="pelota_tenis">Pelota tenis</label>
-    
-    
-   
+            <input type="radio" id="hora3" name="hora" value="18:00" />
+            <label for="hora3">18:00</label>
 
-    <label for="normas">¿Aceptas las normas?</label>
-    <input type="checkbox" name="normas" value="normas">
+            <input type="radio" id="hora4" name="hora" value="19:00" />
+            <label for="hora4">19:00</label>
 
-   
-    <input type="submit" value="Reservar">
-</form>
+            <input type="radio" id="hora5" name="hora" value="20:00" />
+            <label for="hora5">20:00</label>
+
+            <input type="radio" id="hora6" name="hora" value="21:00" />
+            <label for="hora6">21:00</label>
+        </div>
+
+        <label><strong>Materiales</strong></label>
+        <div class="materiales">
+            <input type="checkbox" id="raquetas" name="raquetas">
+            <label for="raquetas">Raquetas</label>
+            <input type="checkbox" id="balon" name="balon_futbol">
+            <label for="balon">Balón</label>
+            <input type="checkbox" id="petos" name="petos">
+            <label for="petos">Petos</label>
+        </div>
+
+
+
+        <label for="normas">¿Aceptas las normas?</label>
+        <input type="checkbox" name="normas" value="normas" required>
+
+
+        <input type="submit" value="Reservar" name="enviar">
+    </form>
 </div>

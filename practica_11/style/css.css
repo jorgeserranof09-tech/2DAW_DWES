@@ -135,7 +135,6 @@ button:hover {
     align-items: center;
     gap: 5px;
     font-size: 14px;
-    cursor: pointer;
 }
 
 
@@ -146,10 +145,16 @@ button:hover {
     border: 0;
     padding: 12px;
     border-radius: 8px;
-    cursor: pointer;
-    transition: background 0.3s;
 }
 
 .contenedor_reserva input[type="submit"]:hover {
     background-color: #218838;
+}
+
+
+.materiales {
+    display: flex;
+    flex-wrap: wrap; 
+    gap: 15px;  
+    justify-content: center;     
 }

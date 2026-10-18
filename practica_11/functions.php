@@ -1,10 +1,11 @@
 <?php
 
-function tabla_reservas() {
+function tabla_reservas()
+{
     $reservas = obtener_datos();
     $pista = filter_input(INPUT_POST, "pista");
     $fecha = filter_input(INPUT_POST, "fecha");
-  
+
     if ($pista && $pista != "Elegir") {
         $array_filtrado = array_filter($reservas, function ($dato) use ($pista) {
             return $dato["pista"] == $pista;
@@ -38,64 +39,80 @@ function tabla_reservas() {
 }
 
 
-
-
-
-
-function validar_datos()
+function verificar_crear_reserva()
 {
-    $nombre = filter_input(INPUT_POST,"nombre");
-    $email = filter_input(INPUT_POST,"email");
-    $pista = filter_input(INPUT_POST,"pista");
-    $fecha = filter_input(INPUT_POST,"fecha");
-    $hora =  filter_input(INPUT_POST,"hora");
-    $normas = filter_input(INPUT_POST,"normas");
 
-
-
-    if($nombre) {
-        if (mb_strlen($nombre, 'UTF-8') < 2 || mb_strlen($nombre, 'UTF-8') > 60) {
-            $error["nombre"] = "Nombre invalido";
-        } else if (filter_var($email, FILTER_VALIDATE_EMAIL) === false) {
-            $error["email"] = "Correo invalido";
-        } else if()
-    }
     /**
+     * mb_strlen: Devuelve la cantidad de caracteres
      * 
-     * mb_strlen Devuelve la cantidad de caracteres
-     * 
-     * filter_validate_email Valida correo
-     * 
+     * filter_validate_email: Valida correo
      */
 
 
-    if (isset($nombre, $email)) {
-        if (mb_strlen($nombre, 'UTF-8') < 2 || mb_strlen($nombre, 'UTF-8') > 60) {
-            //header("Location: reservar.php");
-            echo "El nombre no puede tener menos de 2 caracteres o mas de 60";
-        } else if (filter_var($email, FILTER_VALIDATE_EMAIL) === false) {
-            echo "Correo electronico mal";
+    if (!isset($_POST["enviar"])) {
+        return;
+    }
+    if ($_SERVER["REQUEST_METHOD"] != "POST") {
+        return;
+    }
+
+    $nombre = filter_input(INPUT_POST, "nombre");
+    $email = filter_input(INPUT_POST, "email");
+    $pista = filter_input(INPUT_POST, "pista");
+    $fecha = filter_input(INPUT_POST, "fecha");
+    $hora =  filter_input(INPUT_POST, "hora");
+    $materiales = [];
+    $normas = isset($_POST["normas"]);
+
+    if (isset($_POST["raquetas"])) {
+        $materiales[] = "Raquetas";
+    }
+
+    if (isset($_POST["balon_futbol"])) {
+        $materiales[] = "Balón";
+    }
+
+    if (isset($_POST["petos"])) {
+        $materiales[] = "Petos";
+    }
+
+
+    /**VALIDACION DE CAMPO NOMBRE */
+
+    if ($nombre == "") {
+        $error["nombre"] = "El nombre no puede estar vacío";
+    } elseif (
+        mb_strlen($nombre, "UTF-8") < 2 ||
+        mb_strlen($nombre, "UTF-8") > 60
+    ) {
+        $error["nombre"] = "El nombre debe contener de 2 a 60 caracteres";
+    }
+
+
+    /**VALIDACION DE CAMPO EMAIL */
+
+    if (!$email || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        $error["email"] = "El email no es válido";
+    }
+
+
+    /**Valida que no haya errores y comprueba la disponibilidad */
+    if (empty($error)) {
+        if (!comprobar_disponibilidad_pista($pista, $fecha, $hora)) {
+            $error["disponibilidad"] = "La pista no está disponible";
         }
     }
-}
 
 
+    /** En caso de que comprobar_disponilidad sea false */
+    if (empty($error)) {
+        guardar_datos_reserva($nombre,$email,$pista,$fecha,$hora,$materiales);
 
-
-function validarNormas($normas)
-{
-    if (!isset($_POST['normas']['0']) && !isset($_POST['normas']['1']) && !isset($_POST['normas']['2'])) {
-        //toast("Debes aceptar todas las normas"); 
-        echo '<script type="text/javascript">';
-        echo 'console.log("QUE FALLA")';
-        echo '</script>';
+        echo "<p>Reserva guardada correctamente.</p>";
     } else {
-        for ($i = 0; $i < count($normas); $i++) { ?>
-            <label>
-                <input type="checkbox" name="normas[<?php echo htmlspecialchars($i); ?>]" value="normas<?php echo htmlspecialchars($i); ?>">
-                <?php echo htmlspecialchars($normas[$i]); ?>
-            </label>
-<?php }
+        foreach ($error as $mensaje) {
+            echo "<p>" . htmlspecialchars($mensaje) . "</p>";
+        }
     }
 }
 
@@ -138,6 +155,23 @@ function obtener_datos()
     return $reservas;
 }
 
+function guardar_datos_reserva(string $nombre, string $email, string $pista, string $fecha, string $hora, array $materiales)
+{
+    $datos = [
+        $nombre,
+        $email,
+        $pista,
+        $fecha,
+        $hora,
+        implode(", ", $materiales)
+    ];
+
+    $fp = fopen("datos/reservas.csv", "a");
+
+    fputcsv($fp, $datos, ",", '"', "");
+
+    fclose($fp);
+}
 
 
 function toast($error)
@@ -148,4 +182,3 @@ function toast($error)
         "pista" => "pista no disponible en la fecha seleccionada"
     ];
 }
-?>
