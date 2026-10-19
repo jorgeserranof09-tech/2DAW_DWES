@@ -3,41 +3,24 @@
 function tabla_reservas()
 {
     $reservas = obtener_datos();
-    $pista = filter_input(INPUT_POST, "pista");
-    $fecha = filter_input(INPUT_POST, "fecha");
+    $pista = filter_input(INPUT_POST, "pista") ?? "Elegir";
+    $fecha = filter_input(INPUT_POST, "fecha") ?? "";
 
-    if ($pista && $pista != "Elegir") {
-        $array_filtrado = array_filter($reservas, function ($dato) use ($pista) {
-            return $dato["pista"] == $pista;
-        });
-        foreach ($array_filtrado as $reserva) {
+    foreach ($reservas as $reserva) {
+
+        if (($pista == "Elegir" || $pista == "" || $reserva["pista"] == $pista) &&
+            ($fecha == "" || $reserva["fecha"] == $fecha)
+        ) {
             echo "<tr>";
-            foreach ($reserva as $clave => $dato) {
+
+            foreach ($reserva as $dato) {
                 echo "<td>" . htmlspecialchars($dato) . "</td>";
             }
-            echo "</tr>";
-        }
-    } else if ($fecha) {
-        $array_filtrado = array_filter($reservas, function ($dato) use ($fecha) {
-            return $dato["fecha"] == $fecha;
-        });
-        foreach ($array_filtrado as $reserva) {
-            echo "<tr>";
-            foreach ($reserva as $clave => $dato) {
-                echo "<td>" . htmlspecialchars($dato) . "</td>";
-            }
-            echo "</tr>";
-        }
-    } else {
-        for ($i = 1; $i < count($reservas); $i++) {
-            foreach ($reservas[$i] as $reserva => $dato) {
-                echo "<td>" . $dato . "</td>";
-            }
+
             echo "</tr>";
         }
     }
 }
-
 
 function verificar_crear_reserva()
 {
@@ -96,6 +79,7 @@ function verificar_crear_reserva()
     }
 
 
+
     /**Valida que no haya errores y comprueba la disponibilidad */
     if (empty($error)) {
         if (!comprobar_disponibilidad_pista($pista, $fecha, $hora)) {
@@ -106,7 +90,7 @@ function verificar_crear_reserva()
 
     /** En caso de que comprobar_disponilidad sea false */
     if (empty($error)) {
-        guardar_datos_reserva($nombre,$email,$pista,$fecha,$hora,$materiales);
+        guardar_datos_reserva($nombre, $email, $pista, $fecha, $hora, $materiales);
 
         echo "<p>Reserva guardada correctamente.</p>";
     } else {
@@ -133,38 +117,34 @@ function comprobar_disponibilidad_pista(string $pista, string $fecha, string $ho
 
 function obtener_datos()
 {
-    $contenidoArchivo = trim(file_get_contents("datos/reservas.csv"));
+    $contenidoArchivo = trim(file_get_contents(__DIR__ . "/datos/reservas.csv"));
     $lineasCSV = explode("\n", $contenidoArchivo);
 
-
     $encabezadoCadena = reset($lineasCSV);
-    $encabezadoArray = explode(',', $encabezadoCadena);
+    $encabezadoArray = str_getcsv($encabezadoCadena);
     $encabezadoArrayNuevo = array_map('trim', $encabezadoArray);
 
     $reservas = [];
 
     foreach ($lineasCSV as $clave => $linea) {
-        if ($clave != 0) {
-            $camposLinea = explode(',', $linea);
-            $reserva = array_combine($encabezadoArrayNuevo, $camposLinea);
-            $reserva = array_map('trim', $reserva);
+        if ($clave != 0 && trim($linea) != "") {
+            $camposLinea = str_getcsv(trim($linea));
 
-            $reservas[] = $reserva;
+            if (count($encabezadoArrayNuevo) == count($camposLinea)) {
+                $reserva = array_combine($encabezadoArrayNuevo, $camposLinea);
+                $reserva = array_map('trim', $reserva);
+                $reservas[] = $reserva;
+            }
         }
     }
+
+
     return $reservas;
 }
 
 function guardar_datos_reserva(string $nombre, string $email, string $pista, string $fecha, string $hora, array $materiales)
 {
-    $datos = [
-        $nombre,
-        $email,
-        $pista,
-        $fecha,
-        $hora,
-        implode(", ", $materiales)
-    ];
+    $datos = [$nombre, $email, $pista, $fecha, $hora, implode("-", $materiales)];
 
     $fp = fopen("datos/reservas.csv", "a");
 

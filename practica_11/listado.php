@@ -14,11 +14,10 @@ require_once("functions.php");
             <input type="date" id="fecha" name="fecha" />
             <select name="pista">
                 <option>Elegir</option>
-                <option value="1">Pádel 1</option>
-                <option value="Pista 2">Pádel 2</option>
-                <option value="3">Tenis</option>
-                <option value="3">Baloncesto</option>
-                <option value="3">Futbol</option>
+                <option value="Pádel 1">Pádel 1</option>
+                <option value="Pádel 2">Pádel 2</option>
+                <option value="Tenis">Tenis</option>
+                <option value="Baloncesto">Baloncesto</option>
             </select>
             <input type="submit" value="filtrar">
         </form>
@@ -31,6 +30,7 @@ require_once("functions.php");
                 <td>Pista</td>
                 <td>Fecha</td>
                 <td>Hora</td>
+                <td>Materiales</td>
             </tr>
             <tr>
             <?php tabla_reservas(); ?>
