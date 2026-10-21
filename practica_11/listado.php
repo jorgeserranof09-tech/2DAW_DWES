@@ -20,6 +20,7 @@ require_once("functions.php");
                 <option value="Baloncesto">Baloncesto</option>
             </select>
             <input type="submit" value="filtrar">
+            <a href="./listado.php">Reset</a>
         </form>
 
         <div class="tabla_reservas">
