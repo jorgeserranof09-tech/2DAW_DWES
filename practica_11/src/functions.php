@@ -1,5 +1,6 @@
 <?php
 
+
 function tabla_reservas()
 {
     $reservas = obtener_datos();
@@ -115,35 +116,11 @@ function comprobar_disponibilidad_pista(string $pista, string $fecha, string $ho
 }
 
 
-function obtener_datos()
-{
-    $contenidoArchivo = trim(file_get_contents(__DIR__ . "/datos/reservas.csv"));
-    $lineasCSV = explode("\n", $contenidoArchivo);
 
-    $encabezadoCadena = reset($lineasCSV);
-    $encabezadoArray = str_getcsv($encabezadoCadena);
-    $encabezadoArrayNuevo = array_map('trim', $encabezadoArray);
-
-    $reservas = [];
-
-    foreach ($lineasCSV as $clave => $linea) {
-        if ($clave != 0 && trim($linea) != "") {
-            $camposLinea = str_getcsv(trim($linea));
-
-            if (count($encabezadoArrayNuevo) == count($camposLinea)) {
-                $reserva = array_combine($encabezadoArrayNuevo, $camposLinea);
-                $reserva = array_map('trim', $reserva);
-                $reservas[] = $reserva;
-            }
-        }
-    }
-
-
-    return $reservas;
-}
 
 function guardar_datos_reserva(string $nombre, string $email, string $pista, string $fecha, string $hora, array $materiales)
 {
+    //  if ($_SERVER['REQUEST_METHOD'] == 'POST' && $_POST['crear_reserva'])
     $datos = [$nombre, $email, $pista, $fecha, $hora, implode("-", $materiales)];
 
     $fp = fopen("datos/reservas.csv", "a");
@@ -161,4 +138,19 @@ function toast($error)
         "email" => "Email invalido",
         "pista" => "pista no disponible en la fecha seleccionada"
     ];
+}
+
+function obtener_datos()
+{
+    $conexion = require __DIR__ . "/../conexion.php";
+    $datos = [];
+
+    $buscar_datos = $conexion->query("SELECT nombre,email,pista,fecha,hora,materiales FROM reservas");
+ 
+    
+    while ($dato = $buscar_datos->fetch(PDO::FETCH_ASSOC)) {
+        $datos[] = $dato;
+    }
+
+    return $datos;
 }

@@ -1,5 +1,7 @@
 <?php
-require_once __DIR__ . "/functions.php";
+require_once __DIR__ . "/src/functions.php";
+require_once __DIR__ . "/conexion.php";
+
 $fecha_min = date("Y-m-d");
 $fecha_max = date("Y-m-d", strtotime($fecha_min . ' + 14 days'));
 
@@ -12,7 +14,7 @@ verificar_crear_reserva();
 
 
 
-<link rel="stylesheet" href="style/css.css">
+<link rel="stylesheet" href="src/style/css.css">
 <div class="contenedor_reserva">
     <h1>Formulario de reserva</h1>
     <p>Porfavor rellena el siguiente formulario</p>
@@ -70,6 +72,6 @@ verificar_crear_reserva();
         <input type="checkbox" name="normas" value="normas" required>
 
 
-        <input type="submit" value="Reservar" name="enviar">
+        <input type="submit" value="Reservar" name="crear_reserva">
     </form>
 </div>

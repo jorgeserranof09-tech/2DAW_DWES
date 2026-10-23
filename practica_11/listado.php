@@ -1,10 +1,11 @@
 <?php
-require_once("functions.php");
+require_once __DIR__ . "/src/functions.php";
+require_once __DIR__ . "/conexion.php";
 ?>
 
 
 <head>
-    <link rel="stylesheet" href="style/css.css">
+    <link rel="stylesheet" href="src/style/css.css">
 </head>
 
 <body>
