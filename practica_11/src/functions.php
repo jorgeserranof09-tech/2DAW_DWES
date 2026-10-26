@@ -146,11 +146,26 @@ function obtener_datos()
     $datos = [];
 
     $buscar_datos = $conexion->query("SELECT nombre,email,pista,fecha,hora,materiales FROM reservas");
- 
-    
+
+
     while ($dato = $buscar_datos->fetch(PDO::FETCH_ASSOC)) {
         $datos[] = $dato;
     }
 
     return $datos;
+}
+
+
+function _validateEmailNuevaReserva()
+{
+    $email = filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
+    if ($email) {
+        
+    } else {
+        return [
+            'valido' => false,
+            'mensaje' => 'La reserva debe tener un email válido',
+            'value' => $email
+        ];
+    }
 }
