@@ -1,45 +1,88 @@
 <?php
 
-/**
- * @var array $reservas 
- * Array con la lista de reservas
- * 
- *  @var array $filtros
- * Array con los filtros válidos presentes, si los hay.
- */
+require_once __DIR__ . '../funciones.php';
+
+try {
+    $parametrosBD = [
+        'dsn' => DB_DSN,
+        'username' => DB_USERNAME,
+        'password' => DB_PASSWORD
+    ];
+
+    $reservas = getPersistentData($parametrosBD, 'db');
+
+    $filtros = getValidFiltersFromQueryString();
+
+    $reservas = array_filter(
+        $reservas,
+        function ($reserva) use ($filtros) {
+            return filtraFechaPista($reserva, $filtros);
+        }
+    );
+
+} catch (PDOException $e) {
+    $reservas = [];
+    $errorBD = 'No se han podido cargar las reservas.';
+}
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!--<link rel="stylesheet" href="https://unpkg.com/simpledotcss/simple.min.css">-->
-    <title>Listado reservas</title>
+    <title>Listado de reservas</title>
 </head>
 
 <body>
+
     <h1>Lista de reservas</h1>
-    <form method="get" action="./">
+
+    <?php if (isset($_GET['creada'])): ?>
+        <p>La reserva se ha creado correctamente.</p>
+    <?php endif; ?>
+
+    <?php if (isset($errorBD)): ?>
+        <p><?= htmlspecialchars($errorBD) ?></p>
+    <?php endif; ?>
+
+    <form method="get" action="./index.php">
+
         <fieldset>
             <legend>Filtros</legend>
+
             <label for="filtroPista">Pista</label>
+
             <select name="pista" id="filtroPista">
-                <option value="" selected>Seleccionar...</option>
-                <?php foreach(PISTAS_VALIDAS as $pista): ?>
-                    <option 
-                        <?php echo (isset($filtros['pista'])&&($filtros['pista']===$pista))? 'selected':''; ?>
-                        value="<?php echo htmlspecialchars($pista) ?>"><?php echo htmlspecialchars($pista); ?></option>
-                <?php endforeach ?>
+                <option value="">Seleccionar...</option>
+
+                <?php foreach (PISTAS_VALIDAS as $pista): ?>
+                    <option
+                        value="<?= htmlspecialchars($pista) ?>"
+                        <?= (($filtros['pista'] ?? '') === $pista) ? 'selected' : '' ?>
+                    >
+                        <?= htmlspecialchars($pista) ?>
+                    </option>
+                <?php endforeach; ?>
             </select>
+
             <label for="fecha">Fecha:</label>
-            <input type="date" name="fecha" value="<?php echo (isset($filtros['fecha']))? $filtros['fecha']: ''; ?>">
+
+            <input
+                type="date"
+                id="fecha"
+                name="fecha"
+                value="<?= htmlspecialchars($filtros['fecha'] ?? '') ?>"
+            >
+
             <button type="submit">Filtrar</button>
-            <button><a href="./">Reset</a></button>
+
+            <a href="./index.php">Restablecer filtros</a>
         </fieldset>
 
     </form>
+
     <table>
         <thead>
             <tr>
@@ -51,17 +94,28 @@
                 <th>Material</th>
             </tr>
         </thead>
+
         <tbody>
-            <?php foreach ($reservas as $reserva): ?>
+            <?php if (empty($reservas)): ?>
                 <tr>
-                    <?php foreach ($reserva as $campoReserva): ?>
-                        <td><?php echo htmlspecialchars($campoReserva); ?></td>
-                    <?php endforeach; ?>
+                    <td colspan="6">No hay reservas que mostrar.</td>
                 </tr>
-            <?php endforeach; ?>
+            <?php else: ?>
+                <?php foreach ($reservas as $reserva): ?>
+                    <tr>
+                        <td><?= htmlspecialchars($reserva['nombre']) ?></td>
+                        <td><?= htmlspecialchars($reserva['email']) ?></td>
+                        <td><?= htmlspecialchars($reserva['pista']) ?></td>
+                        <td><?= htmlspecialchars($reserva['fecha']) ?></td>
+                        <td><?= htmlspecialchars($reserva['hora']) ?></td>
+                        <td><?= htmlspecialchars($reserva['material'] ?? '') ?></td>
+                    </tr>
+                <?php endforeach; ?>
+            <?php endif; ?>
         </tbody>
     </table>
-    <a href="./reservar.php">Nueva reserva</a>
-</body>
 
+    <p><a href="./reservar.php">Nueva reserva</a></p>
+
+</body>
 </html>
